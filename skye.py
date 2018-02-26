@@ -15,7 +15,7 @@ from pocketsphinx import DefaultConfig, Decoder, get_model_path, get_data_path
 here = os.path.abspath(os.path.dirname(__file__))
 get_path = partial(os.path.join, here)
 plugin_base = PluginBase(package='skye.plugins',
-                         searchpath=['./plugins/default'])
+                         searchpath=['./plugins/skye'])
 
 
 class Skye(object):
