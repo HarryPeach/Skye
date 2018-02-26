@@ -23,20 +23,7 @@ class Skye(object):
 
     def __init__(self):
         """ Initializes the program """
-        log_format = logging.Formatter(
-                "%(asctime)s [%(module)s] [%(levelname)s] %(message)s")
-        base_logger = logging.getLogger()
-        base_logger.setLevel(logging.DEBUG)
-
-        file_output = logging.FileHandler("logs/{0}.log"
-                                          .format(str(time.time())))
-        file_output.setFormatter(log_format)
-        base_logger.addHandler(file_output)
-
-        console_output = logging.StreamHandler()
-        console_output.setFormatter(log_format)
-        base_logger.addHandler(console_output)
-
+        logging.info("Preparing the plugin path")
         custom_dir_name = "custom"
         self.commands = {}
         self.source = plugin_base.make_plugin_source(
@@ -61,6 +48,7 @@ class Skye(object):
         with sr.Microphone() as source:
             logging.info("Adjusting microphone to ambient noise")
             self.r.adjust_for_ambient_noise(source)
+            logging.info("Microphone adjusted")
             self.r.pause_threshold = 0.6
 
     def begin_passive_listening(self):
@@ -133,6 +121,23 @@ class Skye(object):
         os.unlink(f"temp/voice_files/{timestamp}.mp3")
 
 if __name__ == '__main__':
+    # Set up logging format
+    log_format = logging.Formatter(
+        "%(asctime)s [%(module)s] [%(levelname)s] %(message)s")
+    base_logger = logging.getLogger()
+    base_logger.setLevel(logging.DEBUG)
+
+    file_output = logging.FileHandler("logs/{0}.log"
+                                      .format(str(time.time())))
+    file_output.setFormatter(log_format)
+    base_logger.addHandler(file_output)
+
+    console_output = logging.StreamHandler()
+    console_output.setFormatter(log_format)
+    base_logger.addHandler(console_output)
+
+    # Call an instance of the main class, beginning initialization
+    logging.info("Beginning initialization")
     SKYE = Skye()
     logging.info("Initialization complete")
     logging.info("Beginning passive listening")
