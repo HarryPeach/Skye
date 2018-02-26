@@ -5,6 +5,7 @@ import pyaudio
 import logging
 import time
 import shutil
+import configparser
 import speech_recognition as sr
 from pluginbase import PluginBase
 from functools import partial
@@ -37,6 +38,19 @@ class Skye(object):
 
         logging.info("Creating new temporary files")
         os.makedirs("temp/voice_files")
+
+        logging.info("Loading config files")
+        self.config = configparser.ConfigParser()
+        if os.path.exists("config/skye/config.ini"):
+            self.config.read("config/skye/config.ini")
+        else:
+            logging.warn("No configuration exists, attempting to use "
+                         "default config")
+            if os.path.exists("config/skye/default_config.ini"):
+                self.config.read("config/skye/default_config.ini")
+            else:
+                logging.fatal("No configuration files exist")
+                exit()
 
         logging.info("Loading plugins")
         for plugin_name in self.source.list_plugins():
@@ -95,6 +109,9 @@ class Skye(object):
 
     def active_listen(self):
         """ Begins listening for content after the wakeword """
+        # If text entry mode is enabled, route to the debug function
+        if self.config.getboolean("debug", "text_input"):
+            return self.debug_get_text()
         try:
             with sr.Microphone() as source:
                 logging.info("Listening for input")
@@ -112,13 +129,25 @@ class Skye(object):
             logging.error("WaitTimeout error")
             return -3
 
+    def debug_text_input(self):
+        speech_input = self.debug_get_text()
+        for name, command in self.commands.items():
+            if speech_input in name:
+                command()
+        self.debug_text_input()
+
+    def debug_get_text(self):
+        text = input("skye $ ")
+        logging.debug(f"Ran manual command: {text}")
+        return text
+
     def speak(self, text_to_speak):
         timestamp = str(time.time())
         logging.debug(f"Speaking text: {text_to_speak}")
-        gTTS(text=text_to_speak, lang='en').save(
-             f"temp/voice_files/{timestamp}.mp3")
-        playsound(f"temp/voice_files/{timestamp}.mp3")
-        os.unlink(f"temp/voice_files/{timestamp}.mp3")
+        file_location = f"temp/voice_files/{timestamp}.mp3"
+        gTTS(text=text_to_speak, lang='en').save(file_location)
+        playsound(file_location)
+        os.unlink(file_location)
 
 if __name__ == '__main__':
     # Set up logging format
@@ -141,4 +170,9 @@ if __name__ == '__main__':
     SKYE = Skye()
     logging.info("Initialization complete")
     logging.info("Beginning passive listening")
-    SKYE.begin_passive_listening()
+
+    # Checks whether the debug text input is enabled
+    if SKYE.config.getboolean("debug", "text_input"):
+        SKYE.debug_text_input()
+    else:
+        SKYE.begin_passive_listening()
