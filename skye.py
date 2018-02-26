@@ -97,7 +97,7 @@ class Skye(object):
         """ Begins listening for content after the wakeword """
         try:
             with sr.Microphone() as source:
-                logging.info("Ready for input")
+                logging.info("Listening for input")
                 audio = self.r.listen(source, 3, phrase_time_limit=6)
             speech_input = self.r.recognize_google(audio)
             logging.debug(f"Recognised: {speech_input}")

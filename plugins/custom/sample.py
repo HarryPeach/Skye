@@ -4,8 +4,14 @@ class SamplePlugin(object):
         self.skye = skye
 
     def sample_run(self):
-        print("Sample plugin run")
-        self.skye.speak("testing")
+        self.skye.speak("Say a word")
+        word = self.skye.active_listen()
+        if (word != -1 and
+            word != -2 and
+                word != -3):
+            self.skye.speak(f"You said: {word}")
+        else:
+            self.skye.speak("There was an error understanding you.")
 
 
 def setup(skye):
