@@ -24,4 +24,5 @@ class ExitPlugin(object):
 
 def setup(skye):
     exit_plugin = ExitPlugin(skye)
-    skye.register_command('exit', exit_plugin.close_program)
+    skye.register_command(("exit", "leave", "quit", "stop"),
+                          exit_plugin.close_program)

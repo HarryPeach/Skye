@@ -41,5 +41,8 @@ class DateTimePlugin(object):
 
 def setup(skye):
     datetime_plugin = DateTimePlugin(skye)
-    skye.register_command('date', datetime_plugin.get_date)
-    skye.register_command('time', datetime_plugin.get_time)
+    skye.register_command(("date", "what's the date", "what day is it",
+                          "what is the day", "what's the day",
+                           "what is the date"), datetime_plugin.get_date)
+    skye.register_command(("time", "what's the time", "what time is it",
+                           "what is the time"), datetime_plugin.get_time)

@@ -10,4 +10,4 @@ class SamplePlugin(object):
 
 def setup(skye):
     sample_plugin = SamplePlugin(skye)
-    skye.register_command('sample', sample_plugin.sample_run)
+    skye.register_command(("test", "sample"), sample_plugin.sample_run)

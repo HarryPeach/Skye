@@ -92,8 +92,8 @@ class Skye(object):
                 if (speech_input != -1 and
                     speech_input != -2 and
                         speech_input != -3):
-                    for name, command in sorted(self.commands.items()):
-                        if speech_input == name:
+                    for name, command in self.commands.items():
+                        if speech_input in name:
                             command()
                 elif speech_input == -1:
                     self.speak("Sorry, I didn't catch that.")
