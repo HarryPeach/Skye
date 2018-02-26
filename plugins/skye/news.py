@@ -10,7 +10,7 @@ NEWS_URL = "https://video.news.sky.com/snr/news/snrnews.mp3"
 
 
 class NewsPlugin(object):
-    """ Removes temporary files and exits the program """
+    """ Gets the bulletin from the Sky News website and plays it """
 
     def __init__(self, skye):
         self.skye = skye

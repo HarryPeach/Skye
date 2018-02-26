@@ -17,6 +17,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 get_path = partial(os.path.join, here)
 plugin_base = PluginBase(package='skye.plugins',
                          searchpath=['./plugins/skye'])
+VERSION="2.0.0 alpha1"
 
 
 class Skye(object):
@@ -165,6 +166,19 @@ if __name__ == '__main__':
     console_output = logging.StreamHandler()
     console_output.setFormatter(log_format)
     base_logger.addHandler(console_output)
+
+    # Print about banner
+    logging.info("     _____ _")
+    logging.info("    / ____| |")
+    logging.info("   | (___ | | ___   _  ___")
+    logging.info("    \\___ \\| |/ / | | |/ _ \\")
+    logging.info("    ____) |   <| |_| |  __/")
+    logging.info("   |_____/|_|\\_\\\\__, |\\___|")
+    logging.info("                 __/ |")
+    logging.info("                |___/")
+    logging.info("")
+    logging.info(f"Skye Assistant version {VERSION}")
+    logging.info("")
 
     # Call an instance of the main class, beginning initialization
     logging.info("Beginning initialization")
