@@ -72,7 +72,8 @@ class Skye(object):
         config.set_string('-hmm', os.path.join(get_model_path(), 'en-us'))
         config.set_string('-dict', os.path.join(get_model_path(),
                           'cmudict-en-us.dict'))
-        config.set_string('-keyphrase', 'sky')
+        config.set_string('-keyphrase', self.config.get(
+                          "general", "wake_word"))
         config.set_string('-logfn', 'nul')
         config.set_float('-kws_threshold', 1e-10)
 
@@ -89,7 +90,6 @@ class Skye(object):
             decoder.process_raw(buf, False, False)
             if decoder.hyp() is not None:
                 logging.debug("Wake word recognized")
-                playsound("assets/audio/alert.wav")
                 speech_input = self.active_listen()
                 if (speech_input != -1 and
                     speech_input != -2 and
@@ -115,6 +115,7 @@ class Skye(object):
         try:
             with sr.Microphone() as source:
                 logging.info("Listening for input")
+                playsound("assets/audio/alert.wav")
                 audio = self.r.listen(source, 3, phrase_time_limit=6)
             speech_input = self.r.recognize_google(audio)
             logging.debug(f"Recognised: {speech_input}")
