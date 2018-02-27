@@ -11,13 +11,14 @@ from pluginbase import PluginBase
 from functools import partial
 from playsound import playsound
 from gtts import gTTS
+from utils.onboarding import Onboarding
 from pocketsphinx import DefaultConfig, Decoder, get_model_path, get_data_path
 
 here = os.path.abspath(os.path.dirname(__file__))
 get_path = partial(os.path.join, here)
 plugin_base = PluginBase(package='skye.plugins',
                          searchpath=['./plugins/skye'])
-VERSION="2.0.0 alpha1"
+VERSION="2.0.0 alpha1 build 7"
 
 
 class Skye(object):
@@ -46,7 +47,7 @@ class Skye(object):
             self.config.read("config/skye/config.ini")
         else:
             logging.warn("No configuration exists, attempting to use "
-                         "default config")
+                         "default config. This may cause issues.")
             if os.path.exists("config/skye/default_config.ini"):
                 self.config.read("config/skye/default_config.ini")
             else:
@@ -65,6 +66,11 @@ class Skye(object):
             self.r.adjust_for_ambient_noise(source)
             logging.info("Microphone adjusted")
             self.r.pause_threshold = 0.6
+
+        logging.debug("Checking whether to onboard the user")
+        if self.config.getboolean("general", "onboarding"):
+            onboarding_instance = Onboarding(self)
+            onboarding_instance.onboard()
 
     def begin_passive_listening(self):
         """ Uses PocketSphinx to listen for the wakeword and call the active
