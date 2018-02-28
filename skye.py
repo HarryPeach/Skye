@@ -43,13 +43,14 @@ class Skye(object):
 
         logging.info("Loading config files")
         self.config = configparser.ConfigParser()
-        if os.path.exists("config/skye/config.ini"):
-            self.config.read("config/skye/config.ini")
+        self.config_location = "config/skye/"
+        if os.path.exists(self.config_location + "config.ini"):
+            self.config.read(self.config_location + "config.ini")
         else:
             logging.warn("No configuration exists, attempting to use "
                          "default config. This may cause issues.")
-            if os.path.exists("config/skye/default_config.ini"):
-                self.config.read("config/skye/default_config.ini")
+            if os.path.exists(self.config_location + "default_config.ini"):
+                self.config.read(self.config_location + "default_config.ini")
             else:
                 logging.fatal("No configuration files exist")
                 exit()
