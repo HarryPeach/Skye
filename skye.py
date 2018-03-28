@@ -24,7 +24,8 @@ class Skye(object):
     """ The core Skye class """
 
     def __init__(self):
-        """ Initializes the program """
+        """Initializes the program
+        """
         logging.info("Preparing the plugin path")
         custom_dir_name = "custom"
         self.commands = {}
@@ -68,7 +69,7 @@ class Skye(object):
 
     def begin_passive_listening(self):
         """Uses PocketSphinx to listen for the wakeword and call the active
-            listening function
+           listening function
         """
         config = Decoder.default_config()
         config.set_string('-hmm', os.path.join(get_model_path(), 'en-us'))

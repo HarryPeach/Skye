@@ -80,4 +80,4 @@ def setup(skye):
     skye.register_command(("logout", "log out"),
                           system_plugin.logout_system)
     skye.register_command(("restart", "reboot"),
-                          system_plugin.logout_system)
+                          system_plugin.restart_system)
