@@ -24,6 +24,12 @@ class RandomPlugin(object):
 
 
 def setup(skye):
+    """Called when the plugin is set up. Used to register commands and other
+    initializations
+
+    Arguments:
+        skye {Skye} -- The singleton Skye instance
+    """
     random_plugin = RandomPlugin(skye)
     skye.register_command(("roll", "dice", "roll a dice"),
                           random_plugin.roll_dice)

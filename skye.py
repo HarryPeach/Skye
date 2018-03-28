@@ -17,7 +17,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 get_path = partial(os.path.join, here)
 plugin_base = PluginBase(package='skye.plugins',
                          searchpath=['./plugins/skye'])
-VERSION="2.0.0 alpha1"
+VERSION = "2.0.0 alpha1"
 
 
 class Skye(object):
@@ -67,8 +67,9 @@ class Skye(object):
             self.r.pause_threshold = 0.6
 
     def begin_passive_listening(self):
-        """ Uses PocketSphinx to listen for the wakeword and call the active
-            listening function """
+        """Uses PocketSphinx to listen for the wakeword and call the active
+            listening function
+        """
         config = Decoder.default_config()
         config.set_string('-hmm', os.path.join(get_model_path(), 'en-us'))
         config.set_string('-dict', os.path.join(get_model_path(),
@@ -105,11 +106,17 @@ class Skye(object):
                 logging.debug("Listening for wakeword again")
 
     def register_command(self, name, command):
-        """ A function with plugins can use to register a command """
+        """A function which plugins can use to register a command
+
+        Arguments:
+            name {string} -- Name of the command
+            command {function} -- Function to be called upon name being spoken
+        """
         self.commands[name] = command
 
     def active_listen(self):
-        """ Begins listening for content after the wakeword """
+        """Begins listening for content after the wakeword
+        """
         # If text entry mode is enabled, route to the debug function
         if self.config.getboolean("debug", "text_input"):
             return self.debug_get_text()
@@ -132,6 +139,8 @@ class Skye(object):
             return -3
 
     def debug_text_input(self):
+        """Debug function to run commands based on user input
+        """
         speech_input = self.debug_get_text()
         for name, command in self.commands.items():
             if speech_input in name:
@@ -139,11 +148,23 @@ class Skye(object):
         self.debug_text_input()
 
     def debug_get_text(self):
+        """Retrieves the user input from a console
+
+        Returns:
+            string -- The user's input
+        """
+
         text = input("skye $ ")
         logging.debug(f"Ran manual command: {text}")
         return text
 
     def speak(self, text_to_speak):
+        """TTS function that audibly speaks text to the user
+
+        Arguments:
+            text_to_speak {string} -- Text to be read aloud
+        """
+
         timestamp = str(time.time())
         logging.debug(f"Speaking text: {text_to_speak}")
         file_location = f"temp/voice_files/{timestamp}.mp3"
@@ -153,21 +174,22 @@ class Skye(object):
 
 if __name__ == '__main__':
     # Set up logging format
-    log_format = logging.Formatter(
+    LOG_FORMAT = logging.Formatter(
         "%(asctime)s [%(module)s] [%(levelname)s] %(message)s")
-    base_logger = logging.getLogger()
-    base_logger.setLevel(logging.DEBUG)
+    BASE_LOGGER = logging.getLogger()
+    BASE_LOGGER.setLevel(logging.DEBUG)
 
-    file_output = logging.FileHandler("logs/{0}.log"
+    FILE_OUTPUT = logging.FileHandler("logs/{0}.log"
                                       .format(str(time.time())))
-    file_output.setFormatter(log_format)
-    base_logger.addHandler(file_output)
+    FILE_OUTPUT.setFormatter(LOG_FORMAT)
+    BASE_LOGGER.addHandler(FILE_OUTPUT)
 
-    console_output = logging.StreamHandler()
-    console_output.setFormatter(log_format)
-    base_logger.addHandler(console_output)
+    CONSOLE_OUTPUT = logging.StreamHandler()
+    CONSOLE_OUTPUT.setFormatter(LOG_FORMAT)
+    BASE_LOGGER.addHandler(CONSOLE_OUTPUT)
 
     # Print about banner
+    logging.info("")
     logging.info("     _____ _")
     logging.info("    / ____| |")
     logging.info("   | (___ | | ___   _  ___")

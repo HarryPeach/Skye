@@ -31,17 +31,19 @@ class WeatherPlugin(object):
             max_temp = data['main']['temp_max']
             min_temp = data['main']['temp_min']
             logging.debug("Speaking weather data")
-            self.skye.speak("The weather for {0} will be {1} with a temperature of "
-                         "{2} degrees, a maximum of {3} and a minimum of "
-                         "{4}.".format(location, forecast, round(average_temp),
-                                      max_temp, min_temp))
+            self.skye.speak("The weather for {0} is {1} with a temperature"
+                            "of {2} degrees, a maximum of {3} and a"
+                            "minimum of {4}.".format(location, forecast,
+                                                     round(average_temp),
+                                                     max_temp, min_temp))
         except ConnectionError as connection_error:
             logging.error(connection_error)
             self.skye.speak("There was a connection error, "
                             "please try again later.")
         except TimeoutError as timeout_error:
             logging.error(timeout_error)
-            self.skye.speak("The connection timed out, please try again later.")
+            self.skye.speak("The connection timed out, "
+                            "please try again later.")
 
     def get_location(self):
         if self.skye.config.get("weather", "api_key") == "":
@@ -58,6 +60,12 @@ class WeatherPlugin(object):
 
 
 def setup(skye):
+    """Called when the plugin is set up. Used to register commands and other
+    initializations
+
+    Arguments:
+        skye {Skye} -- The singleton Skye instance
+    """
     weather_plugin = WeatherPlugin(skye)
     skye.register_command(("weather"),
                           weather_plugin.get_location)

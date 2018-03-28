@@ -26,6 +26,12 @@ class NewsPlugin(object):
 
 
 def setup(skye):
+    """Called when the plugin is set up. Used to register commands and other
+    initializations
+
+    Arguments:
+        skye {Skye} -- The singleton Skye instance
+    """
     news_plugin = NewsPlugin(skye)
     skye.register_command(("news", "briefing", "flash briefing"),
                           news_plugin.play_bulletin)
