@@ -1,0 +1,6 @@
+pocketsphinx
+gtts
+pyaudio
+speech_recognition
+playsound
+pluginbase
